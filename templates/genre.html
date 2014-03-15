@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if genres %}
+{% for song in genre %}
+		{{ song }}
+		<br />
+{% endfor %}
+{% endif %}
+{% endblock %}

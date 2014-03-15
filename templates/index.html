@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if genres %}
+{% for genre in genres %}
+		<a href="/genres/{{ genre }}">{{ genre }}</a>
+		<br />
+{% endfor %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+{% from "_helpers.html" import render_field %}
+<form method=post action="/add">
+  <dl>
+  	{{ form.csrf_token }}
+    {{ render_field(form.url) }}
+  </dl>
+  <p><input type=submit value=Add>
+</form>
+{% endblock %}
