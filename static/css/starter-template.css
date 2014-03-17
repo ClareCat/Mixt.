@@ -1,0 +1,15 @@
+body {
+  padding-top: 50px;
+}
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.login {
+	padding-top: 89px;
+}
+
+.center {
+	float: none; margin-left: auto; margin-right: auto;
+}
