@@ -24,7 +24,7 @@
 						<td>{{ data.genre}}</td>
 						<td>{{ data.label }}</td> 
 						<td>{{ data.year }}</td>
-						<td><a href="edit/{{ data.id }}">Edit</a></td>
+						<td><a href="{{ url_for('edit', id=data.id) }}">Edit</a></td>
 					</tr>
 				{% endfor %}
 				{% endif %}
