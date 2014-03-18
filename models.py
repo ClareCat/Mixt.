@@ -30,7 +30,7 @@ class Metadata(db.Model):
     year = db.Column(db.String(4))
     metaid = db.relationship('Songs', backref=db.backref('metadata'))
 
-    def __init__(self, artist, genre, album=None, label=None, year=None):
+    def __init__(self, artist, genre="Misc", album=None, label=None, year=None):
         self.artist = artist
         self.album = album
         self.genre = genre
