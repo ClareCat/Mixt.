@@ -26,7 +26,7 @@ def genre(name):
 	"""
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
-	q = db.session.query(Songs.songurl).all()
+	q = db.session.query(Songs.songurl).join(Metadata).filter(Metadata.genre==name).all()
 	g = [get_embed_code(i[0]) for i in q]
 	return render_template("genre.html", genre=g)
 
@@ -52,6 +52,10 @@ def add():
 		return redirect(request.args.get("next") or url_for("index"))
 	return render_template("add.html", form=form)
 	
+@login_required
+@app.route('/uploads', methods=['GET', 'POST'])
+def uploads():
+	pass
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -89,6 +93,7 @@ def logout_view():
 @login_manager.user_loader
 def load_user(userid):
 	return User.query.get(userid)
+
 
 
 	
