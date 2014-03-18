@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 	{% from "_helpers.html" import render_field %}
-<form method=post action="/uploads/edit/{{ name }}">
+<form method=post action="/uploads/edit/{{ songid }}">
   <dl>
   	{{ form.csrf_token }}
     {{ render_field(form.songname) }}
@@ -11,6 +11,7 @@
     {{ render_field(form.label) }}
     {{ render_field(form.year) }}
   </dl>
-  <p><input type=submit value=Edit>
+  <p><input type=submit name="Edit" value="Edit">
+  <input type=submit name="Delete" value="Delete">
 </form>
 {% endblock %}
