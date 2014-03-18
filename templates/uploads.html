@@ -24,7 +24,11 @@
 						<td>{{ data.genre}}</td>
 						<td>{{ data.label }}</td> 
 						<td>{{ data.year }}</td>
+<<<<<<< HEAD
 						<td><a href="{{ url_for('edit', id=data.id) }}">Edit</a></td>
+=======
+						<td><a class='btn btn-info btn-xs' href="edit/{{ data.id }}"><span class="glyphicon glyphicon-edit"></span> Edit</a></td>
+>>>>>>> e765c739b301e29fa9154bfeae6dee3551995bdf
 					</tr>
 				{% endfor %}
 				{% endif %}
