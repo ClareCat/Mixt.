@@ -1,11 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 {% from "_helpers.html" import render_field %}
-<form method=post action="/add">
-  <dl>
-  	{{ form.csrf_token }}
-    {{ render_field(form.url) }}
-  </dl>
-  <p><input type=submit value=Add>
-</form>
+<div class="container">
+    <div class="row vertical-offset-100 starter-template">
+    	<div class="col-md-4 col-md-offset-4">
+    		<div class="panel panel-default">
+			  	<div class="panel-heading">
+			    	<h3 class="panel-title">Add a SoundCloud URL</h3>
+			 	</div>
+			  	<div class="panel-body">
+			    	<form accept-charset="UTF-8" role="form" method=post action="/add">
+			    		{{ form.csrf_token }}
+                    <fieldset>
+			    	  	<div class="form-group">
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text">
+			    		</div>
+			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Add">
+			    	</fieldset>
+			      	</form>
+			    </div>
+			</div>
+		</div>
+	</div>
+</div>
 {% endblock %}
