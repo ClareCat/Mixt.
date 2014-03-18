@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+{% if uploads %}
+{% for song in uploads %}
+		<a href='uploads/edit/{{ song }}'>{{song}}</a>
+		<br />
+{% endfor %}
+{% endif %}
+{% endblock %}
