@@ -33,7 +33,7 @@ def genre(name):
 def get_embed_code(url):
 	track_url = url
 	print track_url
-	embed_info = client.get('/oembed', url=track_url)
+	embed_info = client.get('/oembed', url=track_url, maxheight=150, show_comments="false")
 	return embed_info.html
 
 
