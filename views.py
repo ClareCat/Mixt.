@@ -23,13 +23,21 @@ def genre(name):
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
 	q = db.session.query(Songs.songurl).join(Metadata).filter(Metadata.genre==name).all()
-	g = [get_embed_code(i[0]) for i in q]
+	g = []
+	for i in q:
+		curr = get_embed_code(i[0])
+		if curr:
+			g.append(curr)
 	return render_template("genre.html", genre=g)
 
 def get_embed_code(url):
 	track_url = url
-	embed_info = client.get('/oembed', url=track_url, maxheight=150)
-	return embed_info.html
+	try:
+		embed_info = client.get('/oembed', url=track_url, maxheight=150)
+		return embed_info.html
+	except Exception, e:
+		print e
+		return None
 
 @login_required
 @app.route('/add', methods=['GET', 'POST'])
