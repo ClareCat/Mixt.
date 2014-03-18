@@ -16,12 +16,26 @@ def index():
 	print g
 	return render_template("index.html", genres=g)
 
+def get_genres():
+	q = db.session.query(distinct(Metadata.genre)).all()
+	return [i[0] for i in q]
+
+
 @app.route('/genre/<name>')
 def genre(name):
 	"""
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
-	return "Genres page"
+	q = db.session.query(Songs.songurl).all()
+	g = [get_embed_code(i[0]) for i in q]
+	return render_template("genre.html", genre=g)
+
+def get_embed_code(url):
+	track_url = url
+	print track_url
+	embed_info = client.get('/oembed', url=track_url)
+	return embed_info.html
+
 
 @login_required
 @app.route('/add', methods=['GET', 'POST'])
@@ -39,6 +53,7 @@ def add():
 	return render_template("add.html", form=form)
 	
 
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	form = LoginForm(request.form)
@@ -49,6 +64,7 @@ def login():
 			flash("Logged in successfully.")
 			return redirect(request.args.get("next") or url_for("index"))
 	return render_template("login.html", form=form)
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -62,19 +78,19 @@ def register():
 			return redirect(request.args.get("next") or url_for("login"))
 	return render_template("register.html", form=form)
 
+
 @login_required
 @app.route('/logout/')
 def logout_view():
     logout_user()
     return redirect(url_for('index'))
 
+
 @login_manager.user_loader
 def load_user(userid):
 	return User.query.get(userid)
 
-def get_genres():
-	q = db.session.query(distinct(Metadata.genre)).all()
-	return [i[0] for i in q]
+
 	
 	
 
