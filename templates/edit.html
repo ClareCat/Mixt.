@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
 	{% from "_helpers.html" import render_field %}
-<form method=post action="/uploads/edit/{{ songid }}">
-  <dl>
-  	{{ form.csrf_token }}
-    {{ render_field(form.songname) }}
-    {{ render_field(form.artist) }}
-    {{ render_field(form.album) }}
-    {{ render_field(form.genre) }}
-    {{ render_field(form.label) }}
-    {{ render_field(form.year) }}
-  </dl>
-  <p><input type=submit name="Edit" value="Edit">
-  <input type=submit name="Delete" value="Delete">
-</form>
+  <div class="container">
+  <div class="row">
+    <div class="span6">
+      <h1>Edit</h1>
+      <h3>{{form.artist.data}} - {{form.songname.data
+      }}</h3>
+      <form method=post action="/uploads/edit/{{ songid }}">
+        <dl>
+        	{{ form.csrf_token }}
+          {{ render_field(form.songname) }}
+          {{ render_field(form.artist) }}
+          {{ render_field(form.album) }}
+          {{ render_field(form.genre) }}
+          {{ render_field(form.label) }}
+          {{ render_field(form.year) }}
+        </dl>
+        <p><input type=submit name="Edit" value="Edit">
+        <input type=submit name="Delete" value="Delete">
+      </form>
+    </div>
+  </div>
+</div>
 {% endblock %}
