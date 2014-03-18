@@ -1,7 +1,7 @@
 from app import app, client, db, login_manager
 from flask import flash, redirect, render_template, request, url_for
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from forms import AddForm, LoginForm, RegisterForm
+from forms import AddForm, EditForm, LoginForm, RegisterForm
 from models import Metadata, Songs, User
 from sqlalchemy import distinct
 import soundcloud
@@ -12,14 +12,9 @@ def index():
 	"""
 	Does work for/renders index
 	"""
-	g = get_genres()
-	print g
-	return render_template("index.html", genres=g)
-
-def get_genres():
 	q = db.session.query(distinct(Metadata.genre)).all()
-	return [i[0] for i in q]
-
+	g = [i[0] for i in q]
+	return render_template("index.html", genres=g)
 
 @app.route('/genre/<name>')
 def genre(name):
@@ -35,7 +30,6 @@ def get_embed_code(url):
 	print track_url
 	embed_info = client.get('/oembed', url=track_url)
 	return embed_info.html
-
 
 @login_required
 @app.route('/add', methods=['GET', 'POST'])
@@ -55,8 +49,27 @@ def add():
 @login_required
 @app.route('/uploads', methods=['GET', 'POST'])
 def uploads():
-	pass
+	q = db.session.query(Songs.name).filter(Songs.uid==current_user.id).all()
+	u = [i[0] for i in q]
+	return render_template("uploads.html", uploads=u)
 
+@login_required
+@app.route('/uploads/edit/<name>', methods=['GET', 'POST'])
+def edit(name):
+	song = db.session.query(Songs.mid, Songs.name, Songs.songurl).filter(Songs.name==name).first()
+	print song
+	meta = db.session.query(Metadata).get(song.mid)
+	form = EditForm(request.form, songname=song.name, artist=meta.artist, album=meta.album, genre=meta.genre, label=meta.label, year=meta.year)
+	if form.validate_on_submit():
+		song.name = form.songname.data
+		meta.artist = form.artist.data
+		meta.album = form.album.data
+		meta.genre = form.genre.data
+		meta.label = form.label.data
+		meta.year = form.year.data
+		db.session.commit()
+		return redirect(url_for("uploads"))		
+	return render_template("edit.html", form=form, name=name)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

@@ -26,7 +26,7 @@ class Metadata(db.Model):
     artist = db.Column(db.String(40), nullable=False)
     album = db.Column(db.String(40))
     genre = db.Column(db.String(20), nullable=False)
-    label = db.Column(db.String(20))
+    label = db.Column(db.String(120))
     year = db.Column(db.String(4))
     metaid = db.relationship('Songs', backref=db.backref('metadata'))
 

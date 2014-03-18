@@ -21,5 +21,13 @@ class RegisterForm(Form):
 	def check_reg(self):
 		return db.session.query(User).filter_by(username=self.username.data).first()
 
+class EditForm(Form):
+	songname = TextField('Songname', [validators.Required()])
+	artist = TextField('Artist', [validators.Required()])
+	album = TextField('Album')
+	genre = TextField('Genre', [validators.Required()])
+	label = TextField('Label')
+	year = TextField('Year')
+
 
 
