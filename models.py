@@ -45,7 +45,7 @@ class Songs(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), nullable=False)
     songurl = db.Column(db.String(120), nullable=False, unique=True)
-    uid = db.Column(db.Integer, db.ForeignKey('users.id'), unique=True, nullable=False)
+    uid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     votes = db.Column(db.Integer)
     origin = db.Column(db.String(5))
     mid = db.Column(db.Integer, db.ForeignKey('metadata.id'), nullable=False)

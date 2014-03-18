@@ -1,9 +1,9 @@
 from app import app, client, db, login_manager
 from flask import flash, redirect, render_template, request, url_for
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from forms import AddForm, LoginForm
+from forms import AddForm, LoginForm, RegisterForm
 from models import Metadata, Songs, User
-from sqlalchemy import func
+from sqlalchemy import distinct
 import soundcloud
 
 
@@ -35,7 +35,6 @@ def add():
 		song = Songs(form.url.data, track.title, current_user.id, "user", metadata.id)
 		db.session.add(song)
 		db.session.commit()
-		print "Successful"
 		return redirect(request.args.get("next") or url_for("index"))
 	return render_template("add.html", form=form)
 	
@@ -45,10 +44,23 @@ def login():
 	form = LoginForm(request.form)
 	if form.validate_on_submit():
 		user = form.get_user()
-		login_user(user)
-		flash("Logged in successfully.")
-		return redirect(request.args.get("next") or url_for("index"))
+		if user:
+			login_user(user)
+			flash("Logged in successfully.")
+			return redirect(request.args.get("next") or url_for("index"))
 	return render_template("login.html", form=form)
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+	form = RegisterForm(request.form)
+	if form.validate_on_submit():
+		reg = form.check_reg()
+		if not reg:
+			user = User(form.username.data, form.password.data)
+			db.session.add(user)
+			db.session.commit()
+			return redirect(request.args.get("next") or url_for("login"))
+	return render_template("register.html", form=form)
 
 @login_required
 @app.route('/logout/')
@@ -61,7 +73,8 @@ def load_user(userid):
 	return User.query.get(userid)
 
 def get_genres():
-	return db.session.query(Metadata.genre, func.count(Metadata.genre)).group_by(Metadata.genre).all()
+	q = db.session.query(distinct(Metadata.genre)).all()
+	return [i[0] for i in q]
 	
 	
 
