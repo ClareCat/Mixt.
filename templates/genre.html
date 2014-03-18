@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-<div style="padding-left:5px; padding-right:5px">
-{% if genre %}
-{% for song in genre %}
-		{{ song|safe }}
-		<br />
-{% endfor %}
-{% endif %}
+<div class="container">
+	{% if genre %}
+	{% for song in genre %}
+		<div class="padding-15px-top-bottom">
+			{{ song|safe }}
+		</div>
+	{% endfor %}
+	{% endif %}
+	</div>
 </div>
 {% endblock %}
