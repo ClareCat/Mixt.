@@ -1,8 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if genres %}
+{% if genre %}
 {% for song in genre %}
-		{{ song }}
+		{{ song|safe }}
 		<br />
 {% endfor %}
 {% endif %}
