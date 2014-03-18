@@ -25,14 +25,10 @@
 	        <div class="collapse navbar-collapse pull-right">
 	          <ul class="nav navbar-nav">
 	            {% if not current_user.is_authenticated() %}
-<<<<<<< HEAD
 				<li><a href="/register"> Register</a></li>
-				<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-=======
 	            	{% if not active_page=='login' %}
 					<li><a href="/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
 					{% endif %}
->>>>>>> 139e615844218f3dff94bc4961b560f986d64c02
 				{% else %}
 				<li><a href="/add"><span class="glyphicon glyphicon-cloud-upload"></span> Add</a></li>
 				<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
