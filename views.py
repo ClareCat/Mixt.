@@ -4,6 +4,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from forms import AddForm, EditForm, LoginForm, RegisterForm
 from models import Metadata, Songs, User
 from sqlalchemy import distinct
+from sqlalchemy.exc import IntegrityError
 import soundcloud
 
 
@@ -36,13 +37,18 @@ def add():
 	form = AddForm(request.form)
 	if form.validate_on_submit():
 		track = client.get('/resolve', url=form.url.data)
-		metadata = Metadata(track.user['username'], track.genre, label=track.label_name, year=track.release_year)
-		db.session.add(metadata)
-		db.session.commit()
-		song = Songs(form.url.data, track.title, current_user.id, "user", metadata.id)
-		db.session.add(song)
-		db.session.commit()
-		return redirect(request.args.get("next") or url_for("index"))
+		try:
+			metadata = Metadata(track.user['username'], track.genre, label=track.label_name, year=track.release_year)
+			db.session.add(metadata)
+			db.session.commit()
+			song = Songs(form.url.data, track.title, current_user.id, "user", metadata.id)
+			db.session.add(song)
+			db.session.commit()
+			return redirect(request.args.get("next") or url_for("index"))
+		except AttributeError:
+			print "Error getting link"
+		except IntegrityError:
+			print "OH NO DUPLICATE"
 	return render_template("add.html", form=form)
 	
 @login_required
