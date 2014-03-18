@@ -38,7 +38,9 @@ def add():
 	if form.validate_on_submit():
 		track = client.get('/resolve', url=form.url.data)
 		try:
-			metadata = Metadata(track.user['username'], genre=track.genre, label=track.label_name, year=track.release_year)
+			if not track.genre:
+				track.genre="Misc"
+			metadata = Metadata(track.user['username'], track.genre, label=track.label_name, year=track.release_year)
 			db.session.add(metadata)
 			db.session.commit()
 			song = Songs(form.url.data, track.title, current_user.id, "user", metadata.id)
