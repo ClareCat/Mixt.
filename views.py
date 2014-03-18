@@ -54,8 +54,20 @@ def add():
 @login_required
 @app.route('/uploads', methods=['GET', 'POST'])
 def uploads():
-	q = db.session.query(Songs.id, Songs.name).filter(Songs.uid==current_user.id).all()
-	u = [(i[0], i[1]) for i in q]
+	q = db.session.query(Songs.id).filter(Songs.uid==current_user.id).all()
+	u = []
+	for i in q:
+		d = {}
+		song = db.session.query(Songs).get(i[0])
+		meta = db.session.query(Metadata).get(song.mid)
+		d['id'] = song.id
+		d['name'] = song.name
+		d['artist'] = meta.artist
+		d['album'] = meta.album
+		d['genre'] = meta.genre
+		d['label'] = meta.label
+		d['year'] = meta.year
+		u.append(d)
 	return render_template("uploads.html", uploads=u)
 
 @login_required

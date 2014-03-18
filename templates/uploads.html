@@ -1,11 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-{% if uploads %}
-{% for songid, song in uploads %}
-		<a href='uploads/edit/{{ songid }}'>{{song}}</a>
-		<br />
-{% endfor %}
-{% endif %}
+
 <div class="container">
 	<div class="row">
 		<div class="span6">
@@ -18,15 +13,22 @@
 					<th>Genre</th>
 					<th>Label</th>
 					<th>Year</th>
+					<th>Edit</th>
 				</tr>
-				<tr>
-					<td>Turn Down for Maciek</td>
-					<td>Lil' Maciek</td> 
-					<td>Greatest Hits</td>
-					<td>Twerk</td>
-					<td>SamGnesinProductions</td> 
-					<td>1969</td>
-				</tr>
+				{% if uploads %}
+				{% for data in uploads %}
+					<tr>
+						<td>{{ data.name }}</td>
+						<td>{{ data.artist }}</td> 
+						<td>{{ data.album }}</td>
+						<td>{{ data.genre}}</td>
+						<td>{{ data.label }}</td> 
+						<td>{{ data.year }}</td>
+						<td><a href="edit/{{ data.id }}">Edit</a></td>
+					</tr>
+				{% endfor %}
+				{% endif %}
+	
 			</table>
 		</div>
 	</div>
