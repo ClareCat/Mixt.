@@ -4,6 +4,7 @@ from flask.ext.login import login_user, logout_user, current_user, login_require
 from forms import AddForm, EditForm, LoginForm, RegisterForm
 from models import Metadata, Songs, User
 from sqlalchemy import distinct
+from sqlalchemy.exc import IntegrityError
 import soundcloud
 
 
@@ -27,8 +28,7 @@ def genre(name):
 
 def get_embed_code(url):
 	track_url = url
-	print track_url
-	embed_info = client.get('/oembed', url=track_url, maxheight=150, show_comments="false")
+	embed_info = client.get('/oembed', url=track_url)
 	return embed_info.html
 
 @login_required
@@ -37,39 +37,48 @@ def add():
 	form = AddForm(request.form)
 	if form.validate_on_submit():
 		track = client.get('/resolve', url=form.url.data)
-		metadata = Metadata(track.user['username'], track.genre, label=track.label_name, year=track.release_year)
-		db.session.add(metadata)
-		db.session.commit()
-		song = Songs(form.url.data, track.title, current_user.id, "user", metadata.id)
-		db.session.add(song)
-		db.session.commit()
-		return redirect(request.args.get("next") or url_for("index"))
+		try:
+			metadata = Metadata(track.user['username'], track.genre, label=track.label_name, year=track.release_year)
+			db.session.add(metadata)
+			db.session.commit()
+			song = Songs(form.url.data, track.title, current_user.id, "user", metadata.id)
+			db.session.add(song)
+			db.session.commit()
+			return redirect(request.args.get("next") or url_for("index"))
+		except AttributeError:
+			print "Error getting link"
+		except IntegrityError:
+			print "OH NO DUPLICATE"
 	return render_template("add.html", form=form)
 	
 @login_required
 @app.route('/uploads', methods=['GET', 'POST'])
 def uploads():
-	q = db.session.query(Songs.name).filter(Songs.uid==current_user.id).all()
-	u = [i[0] for i in q]
+	q = db.session.query(Songs.id, Songs.name).filter(Songs.uid==current_user.id).all()
+	u = [(i[0], i[1]) for i in q]
 	return render_template("uploads.html", uploads=u)
 
 @login_required
-@app.route('/uploads/edit/<name>', methods=['GET', 'POST'])
-def edit(name):
-	song = db.session.query(Songs.mid, Songs.name, Songs.songurl).filter(Songs.name==name).first()
-	print song
+@app.route('/uploads/edit/<id>', methods=['GET', 'POST'])
+def edit(id):
+	song = db.session.query(Songs).get(id)
 	meta = db.session.query(Metadata).get(song.mid)
 	form = EditForm(request.form, songname=song.name, artist=meta.artist, album=meta.album, genre=meta.genre, label=meta.label, year=meta.year)
 	if form.validate_on_submit():
-		song.name = form.songname.data
-		meta.artist = form.artist.data
-		meta.album = form.album.data
-		meta.genre = form.genre.data
-		meta.label = form.label.data
-		meta.year = form.year.data
-		db.session.commit()
+		if 'Delete' in request.form.values():
+			db.session.delete(song)
+			db.session.delete(meta)
+			db.session.commit()
+		else:
+			song.name = form.songname.data
+			meta.artist = form.artist.data
+			meta.album = form.album.data
+			meta.genre = form.genre.data
+			meta.label = form.label.data
+			meta.year = form.year.data
+			db.session.commit()
 		return redirect(url_for("uploads"))		
-	return render_template("edit.html", form=form, name=name)
+	return render_template("edit.html", form=form, songid=id)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

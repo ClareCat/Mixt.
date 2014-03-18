@@ -1,9 +1,34 @@
 {% extends 'base.html' %}
 {% block content %}
 {% if uploads %}
-{% for song in uploads %}
-		<a href='uploads/edit/{{ song }}'>{{song}}</a>
+{% for songid, song in uploads %}
+		<a href='uploads/edit/{{ songid }}'>{{song}}</a>
 		<br />
 {% endfor %}
 {% endif %}
+<div class="container">
+	<div class="row">
+		<div class="span6">
+			<h1>Your Uploads</h1>
+			<table class="table table-striped">
+				<tr>
+					<th>Song Name</th>
+					<th>Artist</th> 
+					<th>Album</th>
+					<th>Genre</th>
+					<th>Label</th>
+					<th>Year</th>
+				</tr>
+				<tr>
+					<td>Turn Down for Maciek</td>
+					<td>Lil' Maciek</td> 
+					<td>Greatest Hits</td>
+					<td>Twerk</td>
+					<td>SamGnesinProductions</td> 
+					<td>1969</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
 {% endblock %}
