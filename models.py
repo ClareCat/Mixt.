@@ -48,6 +48,8 @@ class Songs(db.Model):
     uid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     votes = db.Column(db.Integer)
     origin = db.Column(db.String(5))
+    date = db.Column(db.DateTime)
+    rating = db.Column(db.Integer)
     mid = db.Column(db.Integer, db.ForeignKey('metadata.id'), nullable=False)
 
     def __init__(self, songurl, name, uid, origin, mid):
@@ -57,6 +59,23 @@ class Songs(db.Model):
         self.votes = 0
         self.mid = mid
         self.name = name
+        self.date = datetime.utcnow()
+        self.rating = 1
 
     def __repr__(self):
         return '<Song %r>' % self.songurl
+
+    def increment_rating(self):
+        self.rating += 1
+
+class Vote(db.Model):
+    __tablename__ = "vote"
+    id = db.Column(db.Integer, primary_key=True)
+    uid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    time = db.Column(db.DateTime)
+    songid = db.Column(db.Integer, db.ForeignKey('songs.id'), nullable=False)
+
+    def __init__(self, uid, songid):
+        self.uid = uid
+        self.songid = songid
+        self.time = datetime.utcnow()
