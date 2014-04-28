@@ -11,12 +11,39 @@
 			  	<div class="panel-body">
 			    	<form accept-charset="UTF-8" role="form" method=post action="/add">
 			    		{{ form.csrf_token }}
-                    <fieldset>
-			    	  	<div class="form-group">
-			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text">
+			    	  	<div class="input-group">
+			    	  		<span class="input-group-addon">URL</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
 			    		</div>
-			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Add">
-			    	</fieldset>
+			    		<input class="btn btn-primary btn-block" type="submit" value="Preview"></input>
+			    		<br/>
+
+
+			    		<div class="input-group">
+			    	  		<span class="input-group-addon">Title</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		</div>
+			    		<div class="input-group">
+			    	  		<span class="input-group-addon">Artist</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		</div>
+			    		<div class="input-group">
+			    	  		<span class="input-group-addon">Album</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		</div>
+			    		<div class="input-group">
+			    	  		<span class="input-group-addon">Genre</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		</div>
+			    		<div class="input-group">
+			    	  		<span class="input-group-addon">Label</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		</div>
+			    		<div class="input-group">
+			    	  		<span class="input-group-addon">Year</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		</div>
+			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Add"></input>
 			      	</form>
 			    </div>
 			</div>

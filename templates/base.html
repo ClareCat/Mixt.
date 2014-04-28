@@ -7,10 +7,13 @@
 		<!-- Le Stylesheets -->
 		<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet" media="screen">
 		<link href="{{ url_for('static', filename='css/starter-template.css') }}" rel="stylesheet" media="screen">
+		<link href="{{ url_for('static', filename='css/sidebar.css') }}" rel="stylesheet" media="screen">
 		<link href="{{ url_for('static', filename='css/custom-single-use-styles.css') }}" rel="stylesheet" media="screen">
 	</head>
 	<body>
 		{% set active_page = active_page|default('index') -%}
+		<div id="wrapper" class="active">
+
 		<!-- Navbar -->
 		<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 	      <div class="container">
@@ -40,6 +43,26 @@
 	      </div>
 	    </div>
 	    <!-- End Navbar -->
+	    <!-- Sidebar -->
+	    <div id="sidebar-wrapper">
+	        <ul class="sidebar-nav" id="sidebar">     
+	          <li><a href="/genre/blues">Blues</a></li>
+	          <li><a href="/genre/country">Country</a></li>
+	          <li><a href="/genre/dubstep">Dubstep</a></li>
+	          <li><a href="/genre/electronic">Electronic</a></li>
+	          <li><a href="/genre/folk">Folk</a></li>
+	          <li><a href="/genre/hiphop">Hiphop</a></li>
+	          <li><a href="/genre/house">House</a></li>
+	          <li><a href="/genre/jazz">Jazz</a></li>
+	          <li><a href="/genre/pop">Pop</a></li>
+	          <li><a href="/genre/rap">Rap</a></li>
+	          <li><a href="/genre/rock">Rock</a></li>
+	          <li><a href="/genre/trance">Trance</a></li>
+	          <li><a href="/genre/trap">Trap</a></li>
+	          <li><a href="/genre/world-ethnic">World/Ethnic</a></li>
+	        </ul>
+      	</div>
+	    <!-- End Sidebar -->
 
 		{% block content %}
 		{% endblock %}
