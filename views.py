@@ -1,8 +1,10 @@
 from app import app, client, db, login_manager
+from contextlib import closing
 from flask import flash, redirect, render_template, request, url_for
 from flask.ext.login import login_user, logout_user, current_user, login_required
 from forms import EditForm, LoginForm, PreviewForm, RegisterForm, SourceForm, URLForm
 from models import Metadata, Songs, Sources, User, Vote
+from multiprocessing import Pool
 import praw
 from sqlalchemy import distinct, desc
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
@@ -13,9 +15,20 @@ def index():
 	"""
 	Does work for/renders index
 	"""
-	q = db.session.query(distinct(Metadata.genre)).all()
-	g = [i[0] for i in q]
-	return render_template("index.html", genres=g)
+	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).order_by(desc(Songs.rating)).limit(15)
+	urls = set([i[0] for i in q])
+	numThreads = 9
+	with closing(Pool(numThreads)) as p:
+		urls = dict(zip(urls, p.map(get_embed_code, urls)))
+	g = []
+	for i in q:
+		out_dict = {}
+		curr = urls[i.songurl]
+		if curr:
+			out_dict["info"] = i
+			out_dict["embed"] = curr
+			g.append(out_dict)
+	return render_template("genre.html", genre=g)
 
 @app.route('/genre/<name>')
 def genre(name):
@@ -23,10 +36,14 @@ def genre(name):
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name).order_by(desc(Songs.rating))
+	urls = set([i[0] for i in q])
+	numThreads = 9
+	with closing(Pool(numThreads)) as p:
+		urls = dict(zip(urls, p.map(get_embed_code, urls)))
 	g = []
 	for i in q:
 		out_dict = {}
-		curr = get_embed_code(i[0])
+		curr = urls[i.songurl]
 		if curr:
 			out_dict["info"] = i
 			out_dict["embed"] = curr
@@ -153,6 +170,8 @@ def vote(songid):
 		song.increment_rating()
 		db.session.add(vote)
 		db.session.commit()
+		metadata = db.session.query(Metadata).get(song.mid)
+		return redirect(url_for("genre", name=metadata.genre))
 	return redirect(url_for("index"))
 
 
@@ -219,7 +238,6 @@ def reddit_update():
 			print type(e)
 			print e
 	return redirect(url_for("index"))
-
 
 
 	
