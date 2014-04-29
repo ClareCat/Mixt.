@@ -15,7 +15,7 @@ class URLForm(Form):
 	url = TextField('SoundCloud URL', [validators.Required()])
 
 class PreviewForm(Form):
-	url = TextField('SoundCloud URL', [validators.Required()])
+	url = TextField('URL', [validators.Required()])
 	songname = TextField('Songname', [validators.Required()])
 	artist = TextField('Artist', [validators.Required()])
 	album = TextField('Album')

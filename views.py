@@ -46,12 +46,15 @@ def get_embed_code(url):
 @app.route('/add', methods=['GET', 'POST'])
 def add():
 	urlform = URLForm(request.form)
-	pform = PreviewForm(request.form)
+	pform = PreviewForm()
 	sourceform = SourceForm(request.form)
 	curr=True
 	if urlform.validate_on_submit():
 		track = get_track_info(urlform.url.data)
-		pform = PreviewForm(url=urlform.url.data, songname=track.title, artist=track.user['username'], album=None, label=track.label_name, year=track.release_year)
+		pform.songname.data = track.title
+		pform.artist = track.user['username']
+		pform.label = track.label_name
+		pform.year = track.release_year
 		curr=False
 	elif sourceform.validate_on_submit():
 		add_source(sourceform.source.data, sourceform.genre.data)
@@ -118,6 +121,7 @@ def edit(id):
 	song = db.session.query(Songs).get(id)
 	meta = db.session.query(Metadata).get(song.mid)
 	form = EditForm(request.form, songname=song.name, artist=meta.artist, album=meta.album, genre=meta.genre, label=meta.label, year=meta.year)
+	print form.artist
 	if form.validate_on_submit():
 		if 'Delete' in request.form.values():
 			db.session.delete(song)
