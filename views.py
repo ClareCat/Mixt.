@@ -52,9 +52,14 @@ def add():
 	if urlform.validate_on_submit():
 		track = get_track_info(urlform.url.data)
 		pform.songname.data = track.title
-		pform.artist = track.user['username']
-		pform.label = track.label_name
-		pform.year = track.release_year
+		pform.artist.data = track.user['username']
+		pform.label.data = track.label_name
+		print pform.label.data
+		if pform.label.data is None:
+			pform.label.data = ''
+		pform.year.data = track.release_year
+		if pform.year.data is None:
+			pform.year.data = ''
 		curr=False
 	elif sourceform.validate_on_submit():
 		add_source(sourceform.source.data, sourceform.genre.data)

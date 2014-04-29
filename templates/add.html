@@ -25,29 +25,48 @@
 			    <form accept-charset="UTF-8" role="form" method=post action="/add">
 			    	{{ previewform.csrf_token }}
 			    		<div class="input-group">
-			    	  		<span class="input-group-addon"></span>
-			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    	  		<span class="input-group-addon">URL</span>
+			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text" value="{{previewform.url.data}}"></input>
 
 			    		</div>
 			    		<div class="input-group">
+			    	  		<span class="input-group-addon">Title</span>
+			    		    <input class="form-control" name="songname" id="songname" type="text" value="{{previewform.songname.data}}"></input>
+			    		</div>
+			    		<div class="input-group">
 			    	  		<span class="input-group-addon">Artist</span>
-			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		    <input class="form-control" name="artist" id="artist" type="text" value="{{previewform.artist.data}}"></input>
 			    		</div>
 			    		<div class="input-group">
 			    	  		<span class="input-group-addon">Album</span>
-			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		    <input class="form-control" name="album" id="album" type="text"></input>
 			    		</div>
 			    		<div class="input-group">
 			    	  		<span class="input-group-addon">Genre</span>
-			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		    <select class="form-control" name="genre" id="genre" type="text">
+			    		    	<option value="one">Blues</option>
+			    		    	<option value="one">Country</option>
+			    		    	<option value="one">Dubstep</option>
+			    		    	<option value="one">Electronic</option>
+			    		    	<option value="one">Folk</option>
+			    		    	<option value="one">Hiphop</option>
+			    		    	<option value="one">House</option>
+			    		    	<option value="one">Jazz</option>
+			    		    	<option value="one">Pop</option>
+			    		    	<option value="one">Rap</option>
+			    		    	<option value="one">Rock</option>
+			    		    	<option value="one">Trance</option>
+			    		    	<option value="one">Trap</option>
+			    		    	<option value="one">World/Ethnic</option>
+			    		    </select>
 			    		</div>
 			    		<div class="input-group">
 			    	  		<span class="input-group-addon">Label</span>
-			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		    <input class="form-control" name="label" id="label" type="text" value="{{previewform.label.data}}"></input>
 			    		</div>
 			    		<div class="input-group">
 			    	  		<span class="input-group-addon">Year</span>
-			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
+			    		    <input class="form-control" name="year" id="year" type="text" value="{{previewform.year.data}}"></input>
 			    		</div>
 			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Add"></input>
 			    		</form>
@@ -55,14 +74,24 @@
 			      	
 			    </div>
 			</div>
+			<div class="panel panel-default">
+			  	<div class="panel-heading">
+			    	<h3 class="panel-title">Add a subreddit</h3>
+			 	</div>
+			  	<div class="panel-body">
+			      	<form accept-charset="UTF-8" role="form" method=post action="/add">
+					{{ sourceform.csrf_token }}
+					reddit.com/r/ {{ sourceform.source }}
+					<br/>
+						genre: {{ sourceform.genre }}
+
+						<input class="btn" type="submit" value="Add"></input>
+					</form>
+			    </div>
+			</div>
 		</div>
 	</div>
 </div>
-<form accept-charset="UTF-8" role="form" method=post action="/add">
-{{ sourceform.csrf_token }}
-reddit.com/r/ {{ sourceform.source }}
-genre: {{ sourceform.genre }}
-<input class="btn" type="submit" value="Add"></input>
-</form>
+
 
 {% endblock %}

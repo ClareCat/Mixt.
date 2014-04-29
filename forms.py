@@ -41,6 +41,6 @@ class EditForm(Form):
 
 class SourceForm(Form):
 	source = TextField('Subreddit', [validators.Required()])
-	genre = SelectField('Genre', [validators.Required()], choices=[('electronic', 'electronic')])
+	genre = SelectField('Genre', [validators.Required()], choices=[('Blues', 'Blues'), ('Country','Country'), ('Dubstep','Dubstep'), ('Electronic', 'Electronic'), ('Folk', 'Folk'), ('Hiphop', 'Hiphop'), ('House', 'House'), ('Jazz', 'Jazz'), ('Pop', 'Pop'), ('Rap', 'Rap'), ('Rock', 'Rock'), ('Trance', 'Trance'), ('Trap', 'Trap'), ('World/Ethnic', 'World/Ethnic')])
 
 
