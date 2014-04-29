@@ -64,8 +64,8 @@ def get_track_info(url):
 	return track
 
 def add_track(url, uploader, source, songname, artist, genre, label, year):
-	dupe = db.session.query(Songs.songurl).filter(Songs.songurl==url).first()
-	if len(dupe) > 0:
+	dupe = db.session.query(Songs).filter(Songs.songurl==url).count()
+	if dupe > 0:
 		return None
 	try:
 		metadata = Metadata(artist, genre, label=label, year=year)
@@ -81,8 +81,8 @@ def add_track(url, uploader, source, songname, artist, genre, label, year):
 		print str(type(e)) + " " + str(e)
 
 def add_source(source, genre):
-	dupe = db.session.query(Sources.subreddit).filter(Sources.subreddit==source).first()
-	if len(dupe) > 0:
+	dupe = db.session.query(Sources).filter(Sources.subreddit==source).count()
+	if dupe > 0:
 		return None
 	try:
 		src = Sources(source, genre)
