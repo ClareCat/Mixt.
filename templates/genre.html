@@ -6,11 +6,11 @@
 		<div class="padding-15px-top-bottom">
 			{{ song["embed"]|safe }}
 			<br />
-			{{ song["user"] }} |
-			{{ song["time"] }} |
-			{% if current_user.is_authenticated() %}<a href="/vote/{{ song["id"] }}">Vote</a> |
+			{{ song["info"].username }} |
+			{{ song["info"].date }} |
+			{% if current_user.is_authenticated() %}<a href="/vote/{{ song["info"].id }}">Vote</a> |
 			{% endif %}
-			Rating: {{ song["rating"] }}
+			Rating: {{ song["info"].rating }}
 		</div>
 	{% endfor %}
 	{% endif %}

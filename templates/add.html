@@ -10,17 +10,19 @@
 			 	</div>
 			  	<div class="panel-body">
 			    	<form accept-charset="UTF-8" role="form" method=post action="/add">
-			    		{{ form.csrf_token }}
+				 	{% if curr %}
+			    		{{ urlform.csrf_token }}
 			    	  	<div class="input-group">
 			    	  		<span class="input-group-addon">URL</span>
 			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
 			    		</div>
 			    		<input class="btn btn-primary btn-block" type="submit" value="Preview"></input>
 			    		<br/>
-
-
+			    {% endif %}
+			    {% if not curr %}
+			    	{{ previewform.csrf_token }}
 			    		<div class="input-group">
-			    	  		<span class="input-group-addon">Title</span>
+			    	  		<span class="input-group-addon"></span>
 			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
 			    		</div>
 			    		<div class="input-group">
@@ -44,10 +46,18 @@
 			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text"></input>
 			    		</div>
 			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Add"></input>
+				{% endif %}
 			      	</form>
 			    </div>
 			</div>
 		</div>
 	</div>
 </div>
+<form accept-charset="UTF-8" role="form" method=post action="/add">
+{{ sourceform.csrf_token }}
+reddit.com/r/ {{ sourceform.source }}
+genre: {{ sourceform.genre }}
+<input class="btn" type="submit" value="Add"></input>
+</form>
+
 {% endblock %}

@@ -79,3 +79,25 @@ class Vote(db.Model):
         self.uid = uid
         self.songid = songid
         self.time = datetime.utcnow()
+
+class Sources(db.Model):
+    __tablename__ = "sources"
+    id = db.Column(db.Integer, primary_key=True)
+    subreddit = db.Column(db.String(50), nullable=False, unique=True)
+    date = db.Column(db.DateTime)
+    valid = db.Column(db.Boolean, nullable=False, default=True)
+    misses = db.Column(db.Integer, nullable=False, default=0)
+    genre = db.Column(db.String(20), nullable=False)
+
+    def __init__(self, subreddit, genre):
+        self.subreddit = subreddit
+        self.date = datetime.utcnow()
+        self.genre = genre
+
+    def set_valid(self, valid):
+        self.valid = valid
+
+    def increment_misses(self):
+        self.misses += 1
+
+

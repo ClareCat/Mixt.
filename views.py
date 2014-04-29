@@ -1,8 +1,8 @@
 from app import app, client, db, login_manager
 from flask import flash, redirect, render_template, request, url_for
 from flask.ext.login import login_user, logout_user, current_user, login_required
-from forms import AddForm, EditForm, LoginForm, RegisterForm
-from models import Metadata, Songs, User, Vote
+from forms import EditForm, LoginForm, PreviewForm, RegisterForm, SourceForm, URLForm
+from models import Metadata, Songs, Sources, User, Vote
 import praw
 from sqlalchemy import distinct, desc
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
@@ -22,19 +22,15 @@ def genre(name):
 	"""
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
-	q = db.session.query(Songs.songurl, Songs.uid, Songs.date, Songs.id, Songs.rating).join(Metadata).filter(Metadata.genre==name).order_by(desc(Songs.rating))
+	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name).order_by(desc(Songs.rating))
 	g = []
 	for i in q:
-		out_data = {}
-		user = db.session.query(User.username).filter(User.id==i[1]).first()
+		out_dict = {}
 		curr = get_embed_code(i[0])
 		if curr:
-			out_data["user"] = user[0]
-			out_data["time"] = i[2]
-			out_data["embed"] = curr
-			out_data["id"] = i[3]
-			out_data["rating"] = i[4]
-			g.append(out_data)
+			out_dict["info"] = i
+			out_dict["embed"] = curr
+			g.append(out_dict)
 	return render_template("genre.html", genre=g)
 
 def get_embed_code(url):
@@ -49,33 +45,48 @@ def get_embed_code(url):
 @login_required
 @app.route('/add', methods=['GET', 'POST'])
 def add():
-	form = AddForm(request.form)
-	if form.validate_on_submit():
-		errors = add_track(form.url.data, current_user.id, "user")
-		if errors:
-			print errors
-		else:
-			return redirect(request.args.get("next") or url_for("index"))
-	return render_template("add.html", form=form)
+	urlform = URLForm(request.form)
+	pform = PreviewForm(request.form)
+	sourceform = SourceForm(request.form)
+	curr=True
+	if urlform.validate_on_submit():
+		track = get_track_info(urlform.url.data)
+		pform = PreviewForm(url=urlform.url.data, songname=track.title, artist=track.user['username'], album=None, label=track.label_name, year=track.release_year)
+		curr=False
+	elif sourceform.validate_on_submit():
+		add_source(sourceform.source.data, sourceform.genre.data)
+	elif pform.validate_on_submit():
+		add_track(pform.url.data, current_user.id, "user", pform.songname.data, pform.artist.data, pform.genre.data, pform.label.data, pform.year.data)
+	return render_template("add.html", urlform=urlform, previewform=pform, sourceform=sourceform, curr=curr)
 
-def add_track(url, uploader, source):
+def get_track_info(url):
 	track = client.get('/resolve', url=url)
-	try:
-		if not track.genre:
-			track.genre="Misc"
-		metadata = Metadata(track.user['username'], track.genre, label=track.label_name, year=track.release_year)
-		db.session.add(metadata)
-		db.session.commit()
-		song = Songs(url, track.title, uploader, source, metadata.id)
-		db.session.add(song)
-		db.session.commit()
+	return track
+
+def add_track(url, uploader, source, songname, artist, genre, label, year):
+	dupe = db.session.query(Songs.songurl).filter(Songs.songurl==url).first()
+	if len(dupe) > 0:
 		return None
-	except AttributeError:
-		return "Error getting link"
-	except IntegrityError:
-		return "OH NO DUPLICATE"
-	except InvalidRequestError:
-		return "WTF"
+	try:
+		metadata = Metadata(artist, genre, label=label, year=year)
+		db.session.add(metadata)
+		song = Songs(url, songname, uploader, source, metadata.id)
+		db.session.add(song)
+		vote = Vote(current_user.id, song.id)
+		db.session.add(vote)
+		db.session.commit()
+	except IntegrityError, e:
+		print str(type(e)) + " " + str(e)
+	except InvalidRequestError, e:
+		print str(type(e)) + " " + str(e)
+
+def add_source(source, genre):
+	try:
+		src = Sources(source, genre)
+		db.session.add(src)
+		db.session.commit()
+	except Exception, e:
+		print e
 
 @login_required
 @app.route('/uploads', methods=['GET', 'POST'])
@@ -170,12 +181,30 @@ def load_user(userid):
 @app.route('/cron')
 def reddit_update():
 	r = praw.Reddit(user_agent=("Mixt./1.0 by ClareCat"))
-	submissions = r.get_subreddit('electronicmusic').get_hot()
-	links = []
-	for post in submissions:
-		if "soundcloud" in post.url:
-			add_track(post.url, 2, "auto")
-	
+	subreddits = db.session.query(Sources).filter(Sources.valid==True).all()
+	for sub in subreddits:
+		try:
+			miss = True
+			submissions = r.get_subreddit(sub.subreddit).get_hot()
+			links = []
+			for post in submissions:
+				if "soundcloud" in post.url:
+					miss = False
+					track = get_track_info(post.url)
+					add_track(post.url, 2, "auto", track.title, track.user['username'], sub.genre, track.label_name, track.release_year)
+			if miss:
+				if sub.misses == 6:
+					sub.set_valid(False)
+				else:
+					sub.increment_misses()
+				db.session.commit()
+		except praw.errors.InvalidSubreddit:
+			sub.set_valid(False)
+			db.session.commit()
+		except Exception, e:
+			print type(e)
+			print e
+	return redirect(url_for("index"))
 
 
 
