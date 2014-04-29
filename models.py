@@ -46,7 +46,6 @@ class Songs(db.Model):
     name = db.Column(db.String(120), nullable=False)
     songurl = db.Column(db.String(120), nullable=False, unique=True)
     uid = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    votes = db.Column(db.Integer)
     origin = db.Column(db.String(5))
     date = db.Column(db.DateTime)
     rating = db.Column(db.Integer)
@@ -56,7 +55,6 @@ class Songs(db.Model):
         self.songurl = songurl
         self.uid = uid
         self.origin = origin
-        self.votes = 0
         self.mid = mid
         self.name = name
         self.date = datetime.utcnow()

@@ -54,7 +54,6 @@ def add():
 		pform.songname.data = track.title
 		pform.artist.data = track.user['username']
 		pform.label.data = track.label_name
-		print pform.label.data
 		if pform.label.data is None:
 			pform.label.data = ''
 		pform.year.data = track.release_year
@@ -206,7 +205,7 @@ def reddit_update():
 				if "soundcloud" in post.url:
 					miss = False
 					track = get_track_info(post.url)
-					add_track(post.url, curent_user.id, "auto", track.title, track.user['username'], sub.genre, track.label_name, track.release_year)
+					add_track(post.url, current_user.id, "auto", track.title, track.user['username'], sub.genre, track.label_name, track.release_year)
 			if miss:
 				if sub.misses == 6:
 					sub.set_valid(False)
