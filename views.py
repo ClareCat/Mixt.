@@ -81,6 +81,9 @@ def add_track(url, uploader, source, songname, artist, genre, label, year):
 		print str(type(e)) + " " + str(e)
 
 def add_source(source, genre):
+	dup = db.session.query(Sources.subreddit).filter(Sources.subreddit==source).first()
+	if len(dupe) > 0:
+		return None
 	try:
 		src = Sources(source, genre)
 		db.session.add(src)
