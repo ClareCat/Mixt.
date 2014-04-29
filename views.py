@@ -70,8 +70,10 @@ def add_track(url, uploader, source, songname, artist, genre, label, year):
 	try:
 		metadata = Metadata(artist, genre, label=label, year=year)
 		db.session.add(metadata)
+		db.session.commit()
 		song = Songs(url, songname, uploader, source, metadata.id)
 		db.session.add(song)
+		db.session.commit()
 		vote = Vote(current_user.id, song.id)
 		db.session.add(vote)
 		db.session.commit()
