@@ -31,7 +31,7 @@ def genre(name):
 			out_dict["info"] = i
 			out_dict["embed"] = curr
 			g.append(out_dict)
-	return render_template("genre.html", genre=g, name=name)
+	return render_template("genre.html", genre=g, name=name.title())
 
 def get_embed_code(url):
 	track_url = url
