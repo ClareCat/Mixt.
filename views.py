@@ -16,18 +16,7 @@ def index():
 	Does work for/renders index
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).order_by(desc(Songs.rating)).limit(15)
-	urls = set([i[0] for i in q])
-	numThreads = 9
-	with closing(Pool(numThreads)) as p:
-		urls = dict(zip(urls, p.map(get_embed_code, urls)))
-	g = []
-	for i in q:
-		out_dict = {}
-		curr = urls[i.songurl]
-		if curr:
-			out_dict["info"] = i
-			out_dict["embed"] = curr
-			g.append(out_dict)
+	g = parallel(q)
 	return render_template("genre.html", genre=g)
 
 @app.route('/genre/<name>')
@@ -36,6 +25,14 @@ def genre(name):
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name).order_by(desc(Songs.rating))
+	g = parallel(q)
+	return render_template("genre.html", genre=g, name=name.title())
+
+def parallel(q):
+	"""
+	This function gets all the embed data and returns it as a list!
+	Embed data is fetched in parallel
+	"""
 	urls = set([i[0] for i in q])
 	numThreads = 9
 	with closing(Pool(numThreads)) as p:
@@ -43,12 +40,13 @@ def genre(name):
 	g = []
 	for i in q:
 		out_dict = {}
-		curr = urls[i.songurl]
+		curr = urls.get(i.songurl, None)
 		if curr:
 			out_dict["info"] = i
 			out_dict["embed"] = curr
 			g.append(out_dict)
-	return render_template("genre.html", genre=g, name=name.title())
+	return g
+
 
 def get_embed_code(url):
 	track_url = url
