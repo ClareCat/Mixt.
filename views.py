@@ -183,6 +183,7 @@ def logout_view():
 def load_user(userid):
 	return User.query.get(userid)
 
+@login_required
 @app.route('/cron')
 def reddit_update():
 	r = praw.Reddit(user_agent=("Mixt./1.0 by ClareCat"))
@@ -196,7 +197,7 @@ def reddit_update():
 				if "soundcloud" in post.url:
 					miss = False
 					track = get_track_info(post.url)
-					add_track(post.url, 2, "auto", track.title, track.user['username'], sub.genre, track.label_name, track.release_year)
+					add_track(post.url, curent_user.id, "auto", track.title, track.user['username'], sub.genre, track.label_name, track.release_year)
 			if miss:
 				if sub.misses == 6:
 					sub.set_valid(False)
