@@ -46,7 +46,7 @@ def get_embed_code(url):
 @app.route('/add', methods=['GET', 'POST'])
 def add():
 	urlform = URLForm(request.form)
-	pform = PreviewForm()
+	pform = PreviewForm(request.form)
 	sourceform = SourceForm(request.form)
 	curr=True
 	if urlform.validate_on_submit():
