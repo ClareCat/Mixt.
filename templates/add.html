@@ -23,25 +23,24 @@
 			    {% if not curr %}
 			    <form accept-charset="UTF-8" role="form" method=post action="/add">
 			    	{{ previewform.csrf_token }}
-			    		<div class="input-group">
-			    	  		<span class="input-group-addon">URL</span>
+			    		<div class="input-group" style="width:100%;">
+			    	  		<span class="input-group-addon" style="width:65px;">URL</span>
 			    		    <input class="form-control" placeholder="https://soundcloud.com/" name="url" id="url" type="text" value="{{previewform.url.data}}"></input>
-
 			    		</div>
-			    		<div class="input-group">
-			    	  		<span class="input-group-addon">Title</span>
+			    		<div class="input-group" style="width:100%;">
+			    	  		<span class="input-group-addon" style="width:65px;">Title</span>
 			    		    <input class="form-control" name="songname" id="songname" type="text" value="{{previewform.songname.data}}"></input>
 			    		</div>
-			    		<div class="input-group">
-			    	  		<span class="input-group-addon">Artist</span>
+			    		<div class="input-group" style="width:100%;">
+			    	  		<span class="input-group-addon" style="width:65px;">Artist</span>
 			    		    <input class="form-control" name="artist" id="artist" type="text" value="{{previewform.artist.data}}"></input>
 			    		</div>
-			    		<div class="input-group">
-			    	  		<span class="input-group-addon">Album</span>
+			    		<div class="input-group" style="width:100%;">
+			    	  		<span class="input-group-addon" style="width:65px;">Album</span>
 			    		    <input class="form-control" name="album" id="album" type="text"></input>
 			    		</div>
-			    		<div class="input-group">
-			    	  		<span class="input-group-addon">Genre</span>
+			    		<div class="input-group" style="width:100%;">
+			    	  		<span class="input-group-addon" style="width:65px;">Genre</span>
 			    		    <select class="form-control" name="genre" id="genre" type="text">
 			    		    	<option value="one">Blues</option>
 			    		    	<option value="one">Country</option>
@@ -59,12 +58,12 @@
 			    		    	<option value="one">World/Ethnic</option>
 			    		    </select>
 			    		</div>
-			    		<div class="input-group">
-			    	  		<span class="input-group-addon">Label</span>
+			    		<div class="input-group" style="width:100%;">
+			    	  		<span class="input-group-addon" style="width:65px;">Label</span>
 			    		    <input class="form-control" name="label" id="label" type="text" value="{{previewform.label.data}}"></input>
 			    		</div>
-			    		<div class="input-group">
-			    	  		<span class="input-group-addon">Year</span>
+			    		<div class="input-group" style="width:100%;">
+			    	  		<span class="input-group-addon" style="width:65px;">Year</span>
 			    		    <input class="form-control" name="year" id="year" type="text" value="{{previewform.year.data}}"></input>
 			    		</div>
 			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Add"></input>
@@ -78,17 +77,38 @@
 			    	<h3 class="panel-title">Add a subreddit</h3>
 			 	</div>
 			  	<div class="panel-body">
-			      	<form accept-charset="UTF-8" role="form" method=post action="/add">
-					{{ sourceform.csrf_token }}
-					reddit.com/r/ {{ sourceform.source }}
-					<br/>
-						genre: {{ sourceform.genre }}
+					<form accept-charset="UTF-8" role="form" method=post action="/add">
+					<input id="csrf_token" name="csrf_token" type="hidden" value="1398824818.07##e642be840ae714ee8d6ef101ea9f48ba9356d978">
+					<div class="input-group" style="width:100%;">
+			    		<span class="input-group-addon" style="width:65px;padding:5px;">reddit/r/</span>
+			    	    <input class="form-control" placeholder="dontletmeoutofmyzone" name="source" id="source" type="text">
+			    	</div>
+					<div class="input-group" style="width:100%;">
+			    		<span class="input-group-addon" style="width:65px;">Genre</span>
+			    	    <select class="form-control" id="genre" name="genre">
+			    	    	<option value="Blues">Blues</option>
+			    	    	<option value="Country">Country</option>
+			    	    	<option value="Dubstep">Dubstep</option>
+			    	    	<option value="Electronic">Electronic</option>
+			    	    	<option value="Folk">Folk</option>
+			    	    	<option value="Hiphop">Hiphop</option>
+			    	    	<option value="House">House</option>
+			    	    	<option value="Jazz">Jazz</option>
+			    	    	<option value="Pop">Pop</option>
+			    	    	<option value="Rap">Rap</option>
+			    	    	<option value="Rock">Rock</option>
+			    	    	<option value="Trance">Trance</option>
+			    	    	<option value="Trap">Trap</option>
+			    	    	<option value="World/Ethnic">World/Ethnic</option>
+			    	    </select>
+			    	</div>
+			    		<input class="btn btn-lg btn-success btn-block" type="submit" value="Add"></input>
 
-						<input class="btn" type="submit" value="Add"></input>
-					</form>
+			    	</form>
 			    </div>
 			</div>
 		</div>
+
 	</div>
 
 
