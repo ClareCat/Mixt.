@@ -6,7 +6,7 @@ from forms import EditForm, LoginForm, PreviewForm, RegisterForm, SourceForm, UR
 from models import Metadata, Songs, Sources, User, Vote
 from multiprocessing import Pool
 import praw
-from sqlalchemy import distinct, desc
+from sqlalchemy import distinct, desc, func
 from sqlalchemy.exc import IntegrityError, InvalidRequestError
 import soundcloud
 
@@ -25,7 +25,7 @@ def genre(name):
 	"""
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
-	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name.title()).order_by(desc(Songs.rating))
+	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(func.lower(Metadata.genre)==func.lower(name)).order_by(desc(Songs.rating))
 	urls = [i[0] for i in q]
 	g = parallel(urls, q)
 	return render_template("genre.html", genre=g, name=name.title())
