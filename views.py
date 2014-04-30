@@ -25,7 +25,7 @@ def genre(name):
 	"""
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
-	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name).order_by(desc(Songs.rating))
+	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name.title()).order_by(desc(Songs.rating))
 	urls = [i[0] for i in q]
 	g = parallel(urls, q)
 	return render_template("genre.html", genre=g, name=name.title())
