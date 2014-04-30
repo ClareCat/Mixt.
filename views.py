@@ -17,7 +17,7 @@ def index():
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).order_by(desc(Songs.rating)).limit(15)
 	urls = [i[0] for i in q]
-	g = parallel(urls)
+	g = parallel(urls, q)
 	return render_template("genre.html", genre=g)
 
 @app.route('/genre/<name>')
@@ -27,10 +27,10 @@ def genre(name):
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name).order_by(desc(Songs.rating))
 	urls = [i[0] for i in q]
-	g = parallel(urls)
+	g = parallel(urls, q)
 	return render_template("genre.html", genre=g, name=name.title())
 
-def parallel(urls):
+def parallel(urls, q):
 	"""
 	This function gets all the embed data and returns it as a list!
 	Embed data is fetched in parallel
