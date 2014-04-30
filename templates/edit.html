@@ -1,23 +1,75 @@
 {% extends 'base.html' %}
 {% block content %}
 	{% from "_helpers.html" import render_field %}
-  <div class="row">
-    <div class="span6">
-      <h1>Edit</h1>
-      <h3>{{form.artist.data}} - {{form.songname.data}}</h3>
-      <form method=post action="/uploads/edit/{{ songid }}">
-        <dl>
-        	{{ form.csrf_token }}
-          {{ render_field(form.songname) }}
-          {{ render_field(form.artist) }}
-          {{ render_field(form.album) }}
-          {{ render_field(form.genre) }}
-          {{ render_field(form.label) }}
-          {{ render_field(form.year) }}
-        </dl>
-        <p><input type=submit name="Edit" value="Edit">
-        <input type=submit name="Delete" value="Delete">
-      </form>
+  <div class="row vertical-offset-100 starter-template">
+    <div class="col-md-4 col-md-offset-4">
+
+      <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">Edit Song</h3>
+        </div>
+          <div class="panel-body">
+            <form method=post action="/uploads/edit/{{ songid }}">
+          {{ form.csrf_token }}
+            <div class="input-group" style="width:100%;">
+              <span class="input-group-addon" style="width:65px;padding:5px;">Songname</span>
+                <input class="form-control" placeholder="" name="songname" id="songname" type="text" value="{{form.songname.data}}">
+            </div>
+             <div class="input-group" style="width:100%;">
+              <span class="input-group-addon" style="width:65px;padding:5px;">Artist</span>
+                <input class="form-control" placeholder="" name="artist" id="artist" type="text" value="{{form.artist.data}}">
+            </div>
+             <div class="input-group" style="width:100%;">
+              <span class="input-group-addon" style="width:65px;padding:5px;">Album</span>
+                <input class="form-control" placeholder="" name="album" id="album" type="text" value="{{form.album.data}}">
+            </div>
+
+            <div class="input-group" style="width:100%;">
+              <span class="input-group-addon" style="width:65px;">Genre</span>
+                <select class="form-control" id="genre" name="genre">
+                  <option value="Blues">Blues</option>
+                  <option value="Country">Country</option>
+                  <option value="Dubstep">Dubstep</option>
+                  <option value="Electronic">Electronic</option>
+                  <option value="Folk">Folk</option>
+                  <option value="Hiphop">Hiphop</option>
+                  <option value="House">House</option>
+                  <option value="Jazz">Jazz</option>
+                  <option value="Pop">Pop</option>
+                  <option value="Rap">Rap</option>
+                  <option value="Rock">Rock</option>
+                  <option value="Trance">Trance</option>
+                  <option value="Trap">Trap</option>
+                  <option value="World">World</option>
+                </select>
+            </div>
+             <div class="input-group" style="width:100%;">
+              <span class="input-group-addon" style="width:65px;padding:5px;">Label</span>
+                <input class="form-control" placeholder="" name="label" id="label" type="text" value="{{form.label.data}}">
+            </div>
+             <div class="input-group" style="width:100%;">
+              <span class="input-group-addon" style="width:65px;padding:5px;">Year</span>
+                <input class="form-control" placeholder="" name="year" id="year" type="text" value="{{form.year.data}}">
+            </div>
+            <br/>
+              <input class="btn btn-success btn-block" type="submit" name="Edit" value="Edit"></input>
+              <input class="btn btn-danger btn-block" type="submit" name="Delete" value="Delete"></input>
+            </form>
+          </div>
+      </div>
     </div>
   </div>
+{% endblock %}
+{% block scripts %}
+<script>
+var textToFind = "{{form.genre.data}}";
+
+var dd = document.getElementById('genre');
+for (var i = 0; i < dd.options.length; i++) {
+    if (dd.options[i].text === textToFind) {
+        dd.selectedIndex = i;
+        break;
+    }
+}
+</script>
 {% endblock %}
