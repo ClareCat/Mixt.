@@ -64,7 +64,7 @@ def add():
 	pform = PreviewForm(request.form)
 	sourceform = SourceForm(request.form)
 	curr=True
-	if urlform.validate_on_submit():
+	if urlform.validate_on_submit() and not pform.validate_on_submit:
 		track = get_track_info(urlform.url.data)
 		pform.songname.data = track.title
 		pform.artist.data = track.user['username']
@@ -75,9 +75,12 @@ def add():
 		if pform.year.data is None:
 			pform.year.data = ''
 		curr=False
+		print "here url"
 	elif sourceform.validate_on_submit():
 		add_source(sourceform.source.data, sourceform.genre.data)
+		return redirect(url_for("index"))
 	elif pform.validate_on_submit():
+		print "here"
 		add_track(pform.url.data, current_user.id, "user", pform.songname.data, pform.artist.data, pform.genre.data, pform.label.data, pform.year.data)
 	return render_template("add.html", urlform=urlform, previewform=pform, sourceform=sourceform, curr=curr)
 
