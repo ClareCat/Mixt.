@@ -15,7 +15,8 @@ def index():
 	"""
 	Does work for/renders index
 	"""
-	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).order_by(desc(Songs.rating)).limit(15)
+	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).order_by(desc(Songs.rating)).limit(15).all()
+	print q
 	urls = [i[0] for i in q]
 	g = parallel(urls, q)
 	return render_template("genre.html", genre=g)
@@ -25,7 +26,7 @@ def genre(name):
 	"""
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
-	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(func.lower(Metadata.genre)==func.lower(name)).order_by(desc(Songs.rating))
+	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(func.lower(Metadata.genre)==func.lower(name)).order_by(desc(Songs.rating)).all()
 	urls = [i[0] for i in q]
 	g = parallel(urls, q)
 	return render_template("genre.html", genre=g, name=name.title())
