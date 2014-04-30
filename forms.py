@@ -19,7 +19,7 @@ class PreviewForm(Form):
 	songname = TextField('Songname', [validators.Required()])
 	artist = TextField('Artist', [validators.Required()])
 	album = TextField('Album')
-	genre = SelectField('Genre', [validators.Required()], choices=[('Blues', 'Blues'), ('Country','Country'), ('Dubstep','Dubstep'), ('Electronic', 'Electronic'), ('Folk', 'Folk'), ('Hiphop', 'Hiphop'), ('House', 'House'), ('Jazz', 'Jazz'), ('Pop', 'Pop'), ('Rap', 'Rap'), ('Rock', 'Rock'), ('Trance', 'Trance'), ('Trap', 'Trap'), ('World/Ethnic', 'World/Ethnic')])
+	genre = SelectField('Genre', [validators.Required()], choices=[('Blues', 'blues'), ('Country','country'), ('Dubstep','dubstep'), ('Electronic', 'electronic'), ('Folk', 'folk'), ('Hiphop', 'hiphop'), ('House', 'house'), ('Jazz', 'jazz'), ('Pop', 'pop'), ('Rap', 'rap'), ('Rock', 'rock'), ('Trance', 'trance'), ('Trap', 'trap'), ('World', 'world')])
 	label = TextField('Label')
 	year = TextField('Year') 
 
@@ -35,12 +35,12 @@ class EditForm(Form):
 	songname = TextField('Songname', [validators.Required()])
 	artist = TextField('Artist', [validators.Required()])
 	album = TextField('Album')
-	genre = SelectField('Genre', [validators.Required()], choices=[('Blues', 'Blues'), ('Country','Country'), ('Dubstep','Dubstep'), ('Electronic', 'Electronic'), ('Folk', 'Folk'), ('Hiphop', 'Hiphop'), ('House', 'House'), ('Jazz', 'Jazz'), ('Pop', 'Pop'), ('Rap', 'Rap'), ('Rock', 'Rock'), ('Trance', 'Trance'), ('Trap', 'Trap'), ('World/Ethnic', 'World/Ethnic')])
+	genre = SelectField('Genre', [validators.Required()], choices=[('Blues', 'blues'), ('Country','country'), ('Dubstep','dubstep'), ('Electronic', 'electronic'), ('Folk', 'folk'), ('Hiphop', 'hiphop'), ('House', 'house'), ('Jazz', 'jazz'), ('Pop', 'pop'), ('Rap', 'rap'), ('Rock', 'rock'), ('Trance', 'trance'), ('Trap', 'trap'), ('World', 'world')])
 	label = TextField('Label')
 	year = TextField('Year')
 
 class SourceForm(Form):
 	source = TextField('Subreddit', [validators.Required()])
-	genre = SelectField('Genre', [validators.Required()], choices=[('Blues', 'Blues'), ('Country','Country'), ('Dubstep','Dubstep'), ('Electronic', 'Electronic'), ('Folk', 'Folk'), ('Hiphop', 'Hiphop'), ('House', 'House'), ('Jazz', 'Jazz'), ('Pop', 'Pop'), ('Rap', 'Rap'), ('Rock', 'Rock'), ('Trance', 'Trance'), ('Trap', 'Trap'), ('World/Ethnic', 'World/Ethnic')])
+	genre = SelectField('Genre', [validators.Required()], choices=[('Blues', 'blues'), ('Country','country'), ('Dubstep','dubstep'), ('Electronic', 'electronic'), ('Folk', 'folk'), ('Hiphop', 'hiphop'), ('House', 'house'), ('Jazz', 'jazz'), ('Pop', 'pop'), ('Rap', 'rap'), ('Rock', 'rock'), ('Trance', 'trance'), ('Trap', 'trap'), ('World', 'world')])
 
 
