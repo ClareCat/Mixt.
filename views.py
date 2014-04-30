@@ -145,6 +145,9 @@ def edit(id):
 	print form.artist
 	if form.validate_on_submit():
 		if 'Delete' in request.form.values():
+			votes = db.session.query(Vote).filter(Vote.songid==id).all()
+			for vote in votes:
+				db.session.delete(vote)
 			db.session.delete(song)
 			db.session.delete(meta)
 			db.session.commit()
