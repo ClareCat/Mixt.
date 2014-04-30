@@ -6,7 +6,7 @@
 			{{ song["embed"]|safe }}
 			<br />
 			{{ song["info"].username }} |
-			{{ song["info"].date }} |
+			{{ song["info"].date.strftime("%a %b %y %I:%M %p") }} |
 			{% if current_user.is_authenticated() %}<a href="/vote/{{ song["info"].id }}">Vote</a> |
 			{% endif %}
 			Rating: {{ song["info"].rating }}

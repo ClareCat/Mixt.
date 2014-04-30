@@ -9,7 +9,11 @@ class LoginForm(Form):
 	password = PasswordField('Password', [validators.Required()])
 
 	def get_user(self):
-		return db.session.query(User).filter(and_(User.username==self.username.data, User.password==self.password.data)).first()
+		u = db.session.query(User).filter(and_(User.username==self.username.data)).first()
+		if u and u.check_password(self.password.data):
+			return u
+		else:
+			return None
 
 class URLForm(Form):
 	url = TextField('SoundCloud URL', [validators.Required()])

@@ -16,7 +16,6 @@ def index():
 	Does work for/renders index
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).order_by(desc(Songs.rating)).limit(15).all()
-	print q
 	urls = [i[0] for i in q]
 	g = parallel(urls, q)
 	return render_template("genre.html", genre=g)
@@ -48,7 +47,6 @@ def parallel(urls, q):
 			out_dict["embed"] = curr
 			g.append(out_dict)
 	return g
-
 
 def get_embed_code(url):
 	track_url = url
@@ -203,7 +201,6 @@ def register():
 			db.session.commit()
 			return redirect(request.args.get("next") or url_for("login"))
 	return render_template("register.html", form=form)
-
 
 @login_required
 @app.route('/logout/')
