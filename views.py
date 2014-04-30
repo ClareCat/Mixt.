@@ -65,6 +65,7 @@ def add():
 	pform = PreviewForm(request.form)
 	sourceform = SourceForm(request.form)
 	curr=True
+	print sourceform.validate()
 	if urlform.validate_on_submit() and not pform.validate_on_submit():
 		track = get_track_info(urlform.url.data)
 		pform.songname.data = track.title
