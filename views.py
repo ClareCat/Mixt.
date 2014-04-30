@@ -16,7 +16,8 @@ def index():
 	Does work for/renders index
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).order_by(desc(Songs.rating)).limit(15)
-	g = parallel(q)
+	urls = [i[0] for i in q]
+	g = parallel(urls)
 	return render_template("genre.html", genre=g)
 
 @app.route('/genre/<name>')
@@ -25,15 +26,15 @@ def genre(name):
 	The <name> will be the name of the selected genre and will return all of the matching songs for that genre
 	"""
 	q = db.session.query(Songs.songurl, User.username, Songs.date, Songs.id, Songs.rating).join(Metadata, User).filter(Metadata.genre==name).order_by(desc(Songs.rating))
-	g = parallel(q)
+	urls = [i[0] for i in q]
+	g = parallel(urls)
 	return render_template("genre.html", genre=g, name=name.title())
 
-def parallel(q):
+def parallel(urls):
 	"""
 	This function gets all the embed data and returns it as a list!
 	Embed data is fetched in parallel
 	"""
-	urls = [i[0] for i in q]
 	numThreads = 9
 	with closing(Pool(numThreads)) as p:
 		urls = dict(zip(urls, p.map(get_embed_code, urls)))
