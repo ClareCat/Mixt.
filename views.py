@@ -33,7 +33,7 @@ def parallel(q):
 	This function gets all the embed data and returns it as a list!
 	Embed data is fetched in parallel
 	"""
-	urls = set([i[0] for i in q])
+	urls = [i[0] for i in q]
 	numThreads = 9
 	with closing(Pool(numThreads)) as p:
 		urls = dict(zip(urls, p.map(get_embed_code, urls)))
