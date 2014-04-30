@@ -10,7 +10,7 @@
         </div>
           <div class="panel-body">
             <form method=post action="/uploads/edit/{{ songid }}">
-            <input id="csrf_token" name="csrf_token" type="hidden" value="1398827753.55##091dbc31bf523f048df26a88fafb0a04948bdc13">
+          {{ form.csrf_token }}
             <div class="input-group" style="width:100%;">
               <span class="input-group-addon" style="width:65px;padding:5px;">Songname</span>
                 <input class="form-control" placeholder="" name="songname" id="songname" type="text" value="{{form.songname.data}}">
