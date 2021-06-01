@@ -20,5 +20,5 @@ simplejson==3.3.3
 six==1.6.1
 soundcloud==0.4.1
 update-checker==0.9
-urllib3==1.8
+urllib3==1.26.5
 wsgiref==0.1.2
